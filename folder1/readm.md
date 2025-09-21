@@ -1,267 +1,249 @@
+<p align="center">
+  <b>Omics Codeathon General Application - October 2025</b><br>
+  Organized by the African Society for Bioinformatics and Computational Biology (ASBCB) with support from the NIH Office of Data Science Strategy.<br>
+  Virtual event: October 7–18, 2025 
+</p>
 
-# Methodology: scATAC-TF Cell Type Classification Pipeline
+<h1 align="center">Reverse TF-Machine Learning Modeling of Gene Regulation from scATAC-seq Data</h1>
+<h2 align="center">scATAC-tf</h2>
+<h4 align="center"><i>A novel TF-centric framework for analyzing single-cell chromatin accessibility</i></h4>
+
+---
+<p align="center">
+ <img src="figures/Icon.png" width="600"><br>
+</p>
+---
+<p align="center">
+ <img src="figures/ASBCB-front_image.png" width="600"><br>
+  <i>Fig.1: Overview of mechanisms influencing chromatin accessibility. Source: <a href="https://www.sc-best-practices.org/chromatin_accessibility/introduction.html">sc-best-practices.org</a> </i>
+</p>
+
+---
+## Contributors  
+
+- **Rana H. Abu-Zeid** – Team Lead | Computational Biology & Project Management  
+- **Syrus Semawule** – Bioinformatician | Data processing & Biological Annotation 
+- **Emmanuel Aroma** – Bioinformaticain | ML Modeling & Pipline Control
+- **Toheeb Jumah**   – Bioinformaticain | Manuscript writing
+
+Advisors:  
+- **Olaitan I. Awe** – Training officer, ASBCB, Cape Town, South Africa. 
+---
 
 ## Overview
 
-This methodology describes a comprehensive machine learning approach for cell type classification using single-cell chromatin accessibility (scATAC-seq) and gene expression (scRNA-seq) data. The pipeline emphasizes automated cell annotation, class imbalance handling, and robust model evaluation.
+Traditional scATAC-seq analysis follows a forward approach:  
+
+<p align="center">
+  <b> Open chromatin regions → Identify active TFs → Annotate cell types</b>
+</p>
+
+Our **reverse paradigm** starts with known transcription factors (TFs) and predicts their regulatory activity across cell types.  
+
+<p align="center">
+  <b> Known TFs → Predict regulatory regions → Classify cell-specific TF networks → Discover regulatory mechanisms</b>
+</p>
+
+This enables systematic discovery of TF-driven programs, insights into cellular identity, and mechanisms of disease dysregulation.
 
 ---
 
-## Phase 1: Data Preprocessing & Quality Control (R Implementation)
+## Project Scope & Objectives  
 
-### Step 1: Data Acquisition
-- **Input**: 10X Genomics multiome dataset (scATAC + scRNA)
-- **Files**: `filtered_feature_bc_matrix.h5`, `per_barcode_summary_metrics.csv`, `atac_fragments.tsv.gz`
-- **Validation**: Verify file integrity and expected dimensions
-
-### Step 2: Quality Control Framework
-
-#### RNA Quality Control (Team 1)
-1. **Cell Filtering Criteria**:
-   - Minimum genes per cell: 500
-   - Maximum genes per cell: 6,000 (doublet threshold)
-   - Minimum UMI counts: 800
-   - Maximum mitochondrial gene percentage: 15%
-
-2. **Gene Filtering**:
-   - Complete removal of mitochondrial genes (^MT-)
-   - Retain genes expressed in ≥10 cells
-   - Remove ribosomal genes >50% of total expression
-
-3. **Doublet Detection**:
-   - Apply DoubletFinder with optimized parameters
-   - Estimate doublet rate based on cell count (4-8%)
-   - Remove predicted doublets maintaining cell type balance
-
-#### ATAC Quality Control (Team 2)
-1. **Cell Filtering Criteria**:
-   - Minimum fragments per cell: 1,000
-   - Maximum fragments per cell: 100,000
-   - TSS enrichment score: >2
-   - Nucleosome signal: <4
-   - Fraction of reads in peaks: >15%
-
-2. **Peak Filtering**:
-   - Remove ENCODE blacklisted regions
-   - Filter peaks accessible in <1% of cells
-   - Apply TF-IDF normalization
-
-### Step 3: Automated Cell Type Annotation
-
-#### SingleR Implementation
-1. **Reference Databases**:
-   - Human Primary Cell Atlas (HPCA)
-   - Monaco Immune Database (immune cell specific)
-
-2. **Consensus Annotation**:
-   - Primary: Monaco immune annotations
-   - Fallback: HPCA annotations for missing cells
-   - Standardization: Map to major PBMC types (T_cells, B_cells, Monocytes, NK_cells)
-
-3. **Quality Assurance**:
-   - Remove cell types with <10 cells
-   - Validate against known marker genes
-   - Generate confidence scores
-
-### Step 4: Feature Engineering
-
-#### RNA Features
-- Select top 2,000 variable genes using variance stabilizing transformation
-- Apply log-normalization with scale factor 10,000
-- Generate normalized expression matrix
-
-#### ATAC Features  
-- Select top 5,000 most accessible peaks
-- Apply TF-IDF normalization followed by LSI
-- Calculate motif enrichment scores using JASPAR database
-
-#### Integration
-- Merge RNA and ATAC features for common cells
-- Create combined feature matrix (2,000 genes + 5,000 peaks = 7,000 features)
-- Ensure cell ID consistency between modalities
+- **Primary Goal**: Build machine learning models to classify TFs to their regulatory regions in a cell-type-specific context  
+- **Secondary Goal**: Construct comprehensive TF regulatory networks for immune cells  
+- **Clinical Impact**: Identify therapeutic targets and biomarkers through TF activity profiling  
 
 ---
 
-## Phase 2: Machine Learning Pipeline (Python Implementation)
+## Data Sources  
+Data Sources & Access
+Primary Dataset (Free & Open Access)
+### 📂 **Project Data Overview**
 
-### Step 5: Data Preparation
+| **Data Type**        | **Source**           | **File Format**                                   |
+|----------------------|----------------------|---------------------------------------------------|
+| **scATAC-seq**       | 10X Multiome        | `fragments.tsv.gz`, `peaks.bed`                  |
+| **scRNA-seq**        | 10X Multiome        | `filtered_feature_bc_matrix.h5`                  |
+| **Cell Metadata**    | 10X Multiome        | `singlecell.csv`                                 |
+| **TF Motifs**        | JASPAR 2022         | `JASPAR2022_CORE_vertebrates.meme`               |
+| **Reference Genome** | UCSC hg38           | `hg38.fa.gz`                                     |
+| **Marker Genes**     | PanglaoDB           | `PanglaoDB_markers.tsv`                          |
 
-#### Feature Matrix Construction
-- **Input**: Combined feature matrix [cells × 7,000 features]
-- **Labels**: Automated cell type annotations
-- **Validation**: Verify feature-label alignment
+<p align="center">
+  <img src="figures/ASBCB_draw methodology.png" width="600"><br>
+  <i>Fig.2: Overview of project methodology</i>
+</p>
 
-#### Train-Test Splitting
-- **Method**: Stratified random split maintaining class proportions
-- **Ratio**: 70% training, 30% testing
-- **Seed**: Fixed random seed (42) for reproducibility
 
-### Step 6: Class Imbalance Analysis & Correction
+**Data sets**
 
-#### Imbalance Detection
-1. **Metrics**:
-   - Calculate class frequencies and proportions
-   - Compute imbalance ratios (max_class_size / min_class_size)
-   - Apply threshold: ratio >2.0 indicates significant imbalance
+10X Genomics Human PBMC Multiome (scATAC-seq + scRNA-seq)
 
-2. **Visualization**:
-   - Bar plots of class distributions
-   - Pie charts showing proportions
-   - Imbalance ratio analysis
+Description: Cryopreserved human peripheral blood mononuclear cells (PBMCs) of a healthy female donor aged 25 were obtained by 10x Genomics from AllCells. Paired ATAC and Gene Expression libraries were generated from the isolated nuclei as described in the Chromium Next GEM Single Cell Multiome ATAC + Gene Expression User Guide (CG000338 Rev A) and sequenced on Illumina Novaseq 6000 v1 Kit (Forward Strand Dual-Index Workflow).
 
-#### SMOTE Application
-- **Condition**: Apply only if imbalance ratio >2.0
-- **Parameters**: k_neighbors=3, random_state=42
-- **Validation**: Compare class distributions before/after balancing
-- **Visualization**: Side-by-side comparison plots
+Link to quality checks: [Dataset](https://github.com/omicscodeathon/scatactf/blob/main/data/Study2/pbmc_unsorted_10k%20-%20PBMC%20from%20a%20healthy%20donor%20-%20no%20cell%20sorting%20(10k).html)
 
-### Step 7: Feature Engineering & Selection
+- Estimated number of cells: 12,016 
+- ATACMean raw read pairs per cell: 38,089 
+- ATAC Median high-quality fragments per cell: 9,254 
+- ATAC Number of peaks: 63,751 
+- GEX Mean raw reads per cell: 69,105 
+- GEX Median genes per cell: 1,720 
+- GEX Median UMI counts per cell: 3,302 
+- Linked genes: 12,576 
+- Linked peaks: 46,399 
+- Size: ~144 GB
 
-#### Preprocessing Steps
-1. **Zero Variance Removal**: Drop features with no variation
-2. **Correlation Filtering**: Remove features with correlation >0.95
-3. **Univariate Selection**: SelectKBest with f_classif, k=1,000 features
-4. **Standardization**: StandardScaler for SVM (fit on training only)
+This dataset is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license. 10x citation
 
-### Step 8: Model Development & Training
+**Alternative Small Dataset (For Testing)**
+3k PBMCs scATAC-seq
+Description: Cryopreserved human peripheral blood mononuclear cells (PBMCs) from a healthy female donor aged 25 were obtained by 10x Genomics from AllCells.
 
-#### Model Configuration (Anti-Overfitting Focus)
+Link to quality check: [Alternative dataset](https://cf.10xgenomics.com/samples/cell-arc/2.0.0/pbmc_unsorted_3k/pbmc_unsorted_3k_web_summary.html)
 
-**Random Forest**:
-```python
-RandomForestClassifier(
-    n_estimators=100,
-    max_depth=10,              # Prevent deep trees
-    min_samples_split=20,      # Require more samples to split
-    min_samples_leaf=10,       # Larger leaf nodes
-    max_features='sqrt',       # Feature subsampling
-    class_weight='balanced'    # Handle remaining imbalance
-)
-```
+- Estimated number of cells: 3,009
+- ATAC Mean raw read pairs per cell: 27,511
+- ATAC Median high-quality fragments per cell: 9,877
+- ATAC Number of peaks: 81,156
+- GEX Mean raw reads per cell: 56,597
+- GEX Median genes per cell: 1,494
+- GEX Median UMI counts per cell: 2,764
+- Linked genes: 6,762
+- Linked peaks: 32,613
+- Size: ~24 GB
 
-**XGBoost**:
-```python
-XGBClassifier(
-    n_estimators=100,
-    max_depth=6,               # Moderate depth
-    learning_rate=0.1,         # Conservative learning rate
-    subsample=0.8,             # Row subsampling
-    colsample_bytree=0.8,      # Feature subsampling
-    reg_alpha=0.1,             # L1 regularization
-    reg_lambda=1.0             # L2 regularization
-)
-```
+This dataset is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) license. 10x citation
 
-**Support Vector Machine**:
-```python
-SVC(
-    C=1.0,                     # Regularization parameter
-    kernel='rbf',
-    gamma='scale',             # Automatic scaling
-    class_weight='balanced',   # Handle imbalance
-    probability=True           # Enable probability estimates
-)
-```
+**Reference Resources (Open Source)**
+JASPAR 2022 – TF motif database
+Link: https://jaspar.elixir.no/download/data/2022/CORE/
+File: JASPAR2022_CORE_vertebrates_non-redundant_pfms_meme.txt (~50 MB)
+Content: 746 TF motifs for vertebrates
 
-### Step 9: Model Evaluation Framework
+Cell Type Markers – From PanglaoDB
+Link: https://panglaodb.se/markers.html
+Format: CSV file with marker genes per cell type
 
-#### Primary Metrics
-- **Accuracy**: Overall classification correctness
-- **Precision**: True positives / (True positives + False positives)
-- **Recall**: True positives / (True positives + False negatives)
-- **F1-Score**: Harmonic mean of precision and recall
-- **AUC**: Area under ROC curve (multiclass: one-vs-rest)
+Human Reference Genome** 
+File: hg38.fa.gz (~3 GB)
 
-#### Cross-Validation Analysis
-- **Method**: 5-fold stratified cross-validation
-- **Purpose**: Detect overfitting (train vs validation gap)
-- **Threshold**: Gap >0.1 indicates significant overfitting
-- **Reporting**: Mean and standard deviation across folds
+Link: https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/
+File: hg38.fa.gz (~3 GB)
 
-#### Per-Class Analysis
-- **Classification Reports**: Detailed metrics per cell type
-- **Confusion Matrices**: Misclassification patterns
-- **Class-Specific Performance**: Identify challenging cell types
+---
+### **Input Features** *(shape: n_cells × n_features)*
 
-### Step 10: Overfitting Detection & Prevention
-
-#### Analysis Methods
-1. **Learning Curves**: Plot training vs validation scores
-2. **Cross-Validation Gaps**: Monitor train-validation differences  
-3. **Feature Importance Stability**: Check consistency across folds
-
-#### Prevention Strategies
-1. **Regularization**: Built into model parameters
-2. **Early Stopping**: Monitor validation performance
-3. **Feature Selection**: Reduce dimensionality
-4. **Ensemble Methods**: Reduce variance through averaging
+- **TF Motif Enrichment Scores:** 746 TFs from JASPAR  
+- **Chromatin Accessibility Profiles:** Per-cell accessibility data  
+- **Gene Expression Data:** Derived from paired scRNA-seq  
+- **Cell Metadata:** Includes cell type, batch information, and quality metrics  
+- **Genomic Context Features:** Sequence composition, TSS distance  
 
 ---
 
-## Phase 3: Results & Interpretation
+### **Expected Labels** $$$$$$$
 
-### Step 11: Performance Visualization
+- **Cell Type Annotations:**  
+  `['T_cells', 'B_cells', 'Monocytes', 'NK_cells']`  
 
-#### Comparative Analysis
-- **Model Comparison**: Bar plots of all metrics across models
-- **Confusion Matrices**: Heatmaps for each model
-- **ROC Curves**: Performance visualization (if binary)
-- **Feature Importance**: Top contributing features per model
+- **TF Activity Ground Truth:**  
+  Based on ChIP-seq data when available  
 
-#### Class Imbalance Impact
-- **Before/After SMOTE**: Distribution comparisons
-- **Performance Impact**: Metrics with and without balancing
-- **Class-Specific Improvements**: Per-class performance changes
 
-### Step 12: Biological Validation
+# Workflow  
 
-#### Marker Gene Analysis
-- **Known Markers**: Validate against established cell type markers
-- **Feature Importance**: Identify novel biomarkers
-- **Biological Coherence**: Ensure predictions align with biology
-
-#### External Validation
-- **Literature Comparison**: Cross-reference with published studies
-- **Database Validation**: Compare with ENCODE, ChIP-seq data
-- **Pathway Analysis**: Assess biological pathway enrichment
-
-### Step 13: Output Generation
-
-#### Automated Reports
-- **Performance Summary**: CSV with all model metrics
-- **Detailed Analysis**: Excel workbook with per-class results
-- **Visualization Suite**: High-quality plots for publication
-- **JSON Report**: Machine-readable complete analysis
-
-#### Reproducibility Assets
-- **Parameter Logs**: All hyperparameters and random seeds
-- **Environment Specs**: Package versions and system info
-- **Data Splits**: Exact train/test cell assignments
-- **Model Artifacts**: Saved trained models for reuse
+### **Block 1: Dataset Collection & Setup**  
+1. Download 10X PBMC Multiome dataset (scATAC + scRNA)  
+2. Acquire reference databases (JASPAR, ENCODE, GTEx, marker genes)  
+3. Configure environment (Python, PyTorch, bedtools, GPU setup)  
 
 ---
 
-## Quality Assurance Framework
+### **Block 2: Data Preprocessing**  
+4. Quality control (remove low-quality cells, doublets, rare peaks)  
+5. Normalize accessibility data (log transform, batch correction)  
+6. Annotate cell types using RNA marker genes  
 
-### Validation Checkpoints
-1. **Data Loading**: Verify dimensions and data types
-2. **Preprocessing**: Check cell/feature retention rates
-3. **Annotation**: Validate cell type assignments
-4. **Feature Engineering**: Ensure proper normalization
-5. **Model Training**: Monitor convergence and stability
-6. **Evaluation**: Cross-validate all metrics
+---
 
-### Expected Performance Benchmarks
-- **Classification Accuracy**: 85-95%
-- **Cell Retention**: 70-80% after quality control
-- **Feature Retention**: 15-25% after selection
-- **Overfitting Gap**: <0.05 for production models
-- **Cross-Validation Stability**: CV standard deviation <0.02
+### **Block 3: Feature Engineering**  
+7. Scan DNA sequences for TF motifs (FIMO)  
+8. Build TF activity matrix [cells × TFs]  
+9. Add genomic features (TSS enrichment, gene expression, sequence context)  
 
-### Error Handling
-- **Graceful Degradation**: Continue with warnings for non-critical errors
-- **Automatic Fallbacks**: Alternative methods when primary fails
-- **Comprehensive Logging**: Track all decisions and parameter choices
-- **Validation Alerts**: Warn when benchmarks not met
+---
 
-This methodology ensures reproducible, robust, and biologically meaningful cell type classification while maintaining high computational standards and preventing common pitfalls in machine learning workflows.
+### **Block 4: Model Development**  
+10. Split dataset into train/validation/test  
+11. Train baseline ML models (RF, XGBoost, Logistic Regression)  
+12. Develop deep learning models (Transformers, GNNs, attention-based)  $$$$$$ mat not used....
+
+---
+
+### **Block 5: Training & Optimization**  
+13. Cross-validation & hyperparameter tuning  
+14. Evaluate model performance (Accuracy, F1-score, confusion matrix)  
+15. Select best-performing architecture  
+
+---
+
+### **Block 6: TF Activity Prediction**  
+16. Generate TF activity scores per cell type  
+17. Build TF-cell type regulatory networks  
+18. Discover novel TF-region associations  
+
+---
+
+### **Block 7: Biological Validation**  
+19. Compare predictions with known TF functions  
+20. Validate with external datasets (ENCODE, ChIP-seq)  
+21. Perform pathway enrichment & disease relevance analysis  
+
+---
+
+### **Block 8: Biological Interpretation & Annotation**  
+22. Identify master regulators via network centrality  
+23. Define TF signatures for each immune cell type  
+24. Link TF dysregulation to diseases and therapeutic targets  
+
+---
+
+### **Block 9: Results & Visualization**  
+25. Generate heatmaps, network graphs, cell type plots  
+26. Summarize model performance and biological findings  
+27. Package reproducible workflows and deliverables  
+
+---
+
+## Computational Framework
+
+- **Programming Languages**: Python (PyTorch, scikit-learn, pandas), R (Seurat, Signac)  
+- **Single-cell**: Scanpy, AnnData, episcanpy  $$$$$$$$
+- **Genomics**: pybedtools, pyranges, pyfaidx  
+- **Visualization**: matplotlib, seaborn, plotly  
+- **Infrastructure**: Jupyter Notebook
+
+---
+
+  ## Expected Outputs**
+
+Cell type classification accuracy 
+TF importance rankings per cell type
+Basic heatmap visualizations
+Model performance metrics
+
+---
+
+
+
+## Contact  
+
+- Email: rana.abuzeid@badyau.edu.eg  ,---------,-------------,----------
+- GitHub Issues: For bug reports & feature requests  
+
+If you find this project useful, please give it a **STAR** on GitHub! ⭐
+
+
+
