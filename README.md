@@ -22,19 +22,7 @@ Instead of the traditional approach of identifying TFs from open chromatin regio
 - **Memory**: 16GB RAM minimum (32GB recommended)
 - **Storage**: 5GB free space
 
-### Installation
-
-```bash
-# Clone the repository
-git clone https://github.com/omicscodeathon/scatactf.git
-cd scatactf
-
-# Install Python dependencies
-pip install -r requirements.txt
-
-# Install R dependencies (run in R console)
-source("setup_environment.R")
-```
+---------------------------------
 
 ### Usage
 
@@ -85,7 +73,7 @@ graph LR
 
 ---
 
-## Dataset
+## Dataset .....needs double checking ..
 
 **Primary Dataset**: 10X Genomics PBMC Multiome
 - **Source**: Healthy female donor (age 25)
@@ -101,31 +89,13 @@ graph LR
 ## Results
 
 ### Expected Performance
-- **Classification Accuracy**: 85-95%
+- **Classification Accuracy**: 96-97%
 - **Processing Time**: 2-4 hours (depending on dataset size)
 - **Cell Type Recovery**: >90% agreement with reference annotations
 
-### Output Files
-- `model_performance_summary.csv`: Complete metrics table
-- `detailed_model_results.xlsx`: Per-class performance analysis
-- `confusion_matrices.png`: Classification accuracy visualization
-- `feature_importance.png`: Key biomarkers identification
-
 ---
 
-## File Structure
 
-```
-scatactf/
-├── data/                          # Dataset storage
-├── team1_rna_processing.R         # RNA data processing
-├── team2_atac_processing.R        # ATAC data processing  
-├── ml_pipeline.py                 # Machine learning pipeline
-├── setup_environment.R           # R package installation
-├── requirements.txt               # Python dependencies
-├── results/                       # Output files
-└── docs/                          # Documentation
-```
 
 ---
 
@@ -140,7 +110,7 @@ library(SingleR)        # Automated cell annotation
 library(DoubletFinder)  # Doublet detection
 ```
 
-### Python Packages
+### Python Packages ---- if any changes during installation ..please edit.. 
 ```python
 # Essential packages
 pandas>=1.3.0           # Data manipulation
@@ -161,29 +131,6 @@ imbalanced-learn>=0.8.0 # Class balancing
 | **Data Analyst** | Toheeb Jumah | Manuscript Writing & Analysis |
 
 **Advisor**: Olaitan I. Awe, ASBCB Training Officer
-
----
-
-## Citation
-
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@software{scatactf2025,
-  title={scATAC-TF: Machine Learning Framework for Cell Type Classification},
-  author={Abu-Zeid, Rana H. and Semawule, Syrus and Aroma, Emmanuel and Jumah, Toheeb},
-  year={2025},
-  url={https://github.com/omicscodeathon/scatactf}
-}
-```
-
----
-
-## Support
-
-- **Issues**: Report bugs and request features via [GitHub Issues](https://github.com/omicscodeathon/scatactf/issues)
-- **Email**: rana.abuzeid@badyau.edu.eg
-- **Documentation**: Full documentation available in `/docs/`
 
 ---
 
