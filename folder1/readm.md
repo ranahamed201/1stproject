@@ -245,7 +245,7 @@ The pipeline evaluates multiple ML algorithms:
 
 ##  Acknowledgments
 
-- **Olaitan I. Awe** – Training officer, ASBCB, Cape Town, South Africa. 
+- **Dr.Olaitan I. Awe** – Training officer, ASBCB, Cape Town, South Africa. 
 
 - **ASBCB Omics Codeathon 2025** - Platform and support
 - **10X Genomics** - Open access multiome datasets  
