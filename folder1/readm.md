@@ -82,7 +82,7 @@ https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-1
 ## 🛠️ Implementation
 
 ### Part 1: RNA Data Processing (R)
-**Script**: `rna_processing_team1.R`
+**Script**: `rna_processing_part1.R`
 - **Framework**: Seurat ecosystem
 - **Features**:
   - Quality control and filtering (MT%, ribosomal genes)
@@ -92,7 +92,7 @@ https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-1
   - Export of top 2000 variable genes for ML
 
 ### Part 2: ATAC Data Processing (R)  
-**Script**: `atac_processing_team2.R`
+**Script**: `atac_processing_part2.R`
 - **Framework**: Signac + GenomicRanges
 - **Features**:
   - ChromatinAssay creation with peak matrices
