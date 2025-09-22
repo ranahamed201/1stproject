@@ -51,6 +51,16 @@ This repository contains a comprehensive bioinformatics pipeline for analyzing s
                                                               │ •  Evaluation                       │
                                                               └─────────────────────────────────────┘
 ```
+---
+<p align="center">
+ <img src="figures/Icon.png" width="600"><br>
+</p>
+---
+<p align="center">
+ <img src="figures/ASBCB-front_image.png" width="600"><br>
+  <i>Fig.1: Overview of mechanisms influencing chromatin accessibility. Source: <a href="https://www.sc-best-practices.org/chromatin_accessibility/introduction.html">sc-best-practices.org</a> </i>
+</p>
+
 
 ---
 
@@ -79,7 +89,7 @@ Download the 10X Multiome dataset:
 https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-10-k-1-standard-1-0-0
 # ... (download the required files)
 ```
-## 🛠️ Implementation
+##  Implementation
 
 ### Part 1: RNA Data Processing (R)
 **Script**: `rna_processing_part1.R`
@@ -149,7 +159,7 @@ ml_pipeline_complete.py
 
 ---
 
-## 📈 Results & Performance
+##  Results & Performance
 
 ### Model Performance Summary -------->>>>>>>>>>>>>>
 The pipeline evaluates multiple ML algorithms:
