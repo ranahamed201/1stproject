@@ -121,7 +121,7 @@ https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-1
 install.packages(c("Seurat", "hdf5r", "dplyr", "ggplot2"))
 BiocManager::install(c("Signac", "EnsDb.Hsapiens.v75", "celldex", "SingleR"))
 
-# Python dependencies  
+# main Python dependencies  
 pip install pandas numpy scikit-learn xgboost imbalanced-learn
 pip install matplotlib seaborn plotly
 ```
@@ -151,7 +151,7 @@ ml_pipeline_complete.py
 
 ## 📈 Results & Performance
 
-### Model Performance Summary
+### Model Performance Summary -------->>>>>>>>>>>>>>
 The pipeline evaluates multiple ML algorithms:
 
 | Model | Accuracy | Precision | Recall | F1-Score | AUC |
