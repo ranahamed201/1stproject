@@ -1,16 +1,18 @@
-# Single-Cell Multiomics Analysis Pipeline
-## scRNA-seq + scATAC-seq Cell Type Classification
-
 <p align="center">
-  <b>Advanced Machine Learning Pipeline for Single-Cell Multiomics Data</b><br>
-  Integrating RNA-seq and ATAC-seq for Cell Type Classification
+  <b>Omics Codeathon General Application - October 2025</b><br>
+  Organized by the African Society for Bioinformatics and Computational Biology (ASBCB) with support from the NIH Office of Data Science Strategy.<br>
+  Virtual event: October 7–18, 2025 
 </p>
+
+<h1 align="center">Reverse TF-Machine Learning Modeling of Gene Regulation from scATAC-seq Data</h1>
+<h2 align="center">scATAC-tf</h2>
+<h4 align="center"><i>A novel TF-centric framework for analyzing single-cell chromatin accessibility</i></h4>
 
 ---
 
-## 🧬 Overview
+##  Overview
 
-This repository contains a comprehensive bioinformatics pipeline for analyzing single-cell multiomics data, specifically combining scRNA-seq and scATAC-seq from 10X Genomics Multiome datasets. The pipeline performs cell type classification using machine learning approaches with proper handling of class imbalance and overfitting prevention.
+This repository contains a comprehensive bioinformatics pipeline for analyzing single-cell multiomics data, specifically combining scRNA-seq and scATAC-seq from 10X Genomics Multiome datasets. The pipeline performs cell type classification using machine learning approaches, with proper handling of class imbalance and prevention of overfitting.
 
 ### Key Features
 - **Dual-modality Analysis**: Integrates both RNA expression and chromatin accessibility data
@@ -21,32 +23,32 @@ This repository contains a comprehensive bioinformatics pipeline for analyzing s
 
 ---
 
-## 🏗️ Pipeline Architecture
+## Pipeline Architecture
 
 ```
 Raw 10X Multiomics Data
          ↓
 ┌─────────────────┬─────────────────┐
-│   Team 1 (R)    │   Team 2 (R)    │
-│  RNA Processing │  ATAC Processing │
-│     ↓           │       ↓         │
+│   Part 1 (R)    │   Part 2 (R)    │
+│ RNA Processing  │ ATAC Processing │
+│        ↓        │       ↓         │
 │ • QC Filtering  │ • Peak Calling  │
 │ • Normalization │ • QC Metrics    │
 │ • Cell Typing   │ • TF-IDF Norm   │
-│ • Feature Sel.  │ • LSI Reduction │
+│ • Feature Sel   │ • LSI Reduction │
 └─────────────────┴─────────────────┘
-         ↓
-    Data Integration
-         ↓
+                  ↓
+           Data Integration
+                  ↓
 ┌─────────────────────────────────────┐
-│        Team 3 (Python)             │
+│        Part 3 (Python)              │
 │     ML Pipeline & Classification    │
 │                                     │
 │ • Class Balance Analysis            │
-│ • Feature Engineering              │  
-│ • Multi-model Training             │
-│ • Overfitting Prevention           │
-│ • Comprehensive Evaluation         │
+│ • Feature Engineering               │  
+│ • Multi-model Training              │
+│ • Overfitting Prevention            │
+│ •  Evaluation                       │
 └─────────────────────────────────────┘
 ```
 
@@ -71,10 +73,15 @@ pbmc_unsorted_10k_atac_peaks.bed
 ```
 
 ---
-
+###  Data Download
+Download the 10X Multiome dataset:
+```
+https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-10-k-1-standard-1-0-0
+# ... (download the required files)
+```
 ## 🛠️ Implementation
 
-### Team 1: RNA Data Processing (R)
+### Part 1: RNA Data Processing (R)
 **Script**: `rna_processing_team1.R`
 - **Framework**: Seurat ecosystem
 - **Features**:
@@ -84,7 +91,7 @@ pbmc_unsorted_10k_atac_peaks.bed
   - Cell type annotation using SingleR with HumanPrimaryCellAtlas
   - Export of top 2000 variable genes for ML
 
-### Team 2: ATAC Data Processing (R)  
+### Part 2: ATAC Data Processing (R)  
 **Script**: `atac_processing_team2.R`
 - **Framework**: Signac + GenomicRanges
 - **Features**:
@@ -94,7 +101,7 @@ pbmc_unsorted_10k_atac_peaks.bed
   - Peak accessibility scoring
   - Integration with RNA data for ML pipeline
 
-### Team 3: Machine Learning Pipeline (Python)
+### Part 3: Machine Learning Pipeline (Python)
 **Script**: `ml_pipeline_complete.py`
 - **Framework**: scikit-learn, XGBoost, imbalanced-learn
 - **Features**:
@@ -106,7 +113,7 @@ pbmc_unsorted_10k_atac_peaks.bed
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Environment Setup
 ```bash
@@ -123,7 +130,6 @@ pip install matplotlib seaborn plotly
 Download the 10X Multiome dataset:
 ```
 https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-10-k-1-standard-1-0-0
-# ... (download other required files)
 ```
 
 ### 3. Run Pipeline
@@ -164,11 +170,11 @@ The pipeline evaluates multiple ML algorithms:
 
 ### Output Files Generated
 ```
-├── team1_rna_output/
+├── Part1_rna_output/
 │   ├── rna_features_2000.csv
 │   ├── cell_type_labels.csv
 │   └── pbmc_rna_processed.rds
-├── team2_atac_output/
+├── Part2_atac_output/
 │   ├── atac_features_5000.csv  
 │   ├── top_peaks_info.csv
 │   └── pbmc_atac_processed.rds
@@ -205,23 +211,6 @@ The pipeline evaluates multiple ML algorithms:
 
 ---
 
-## 📁 Repository Structure
-```
-├── scripts/
-│   ├── rna_processing_team1.R
-│   ├── atac_processing_team2.R  
-│   └── ml_pipeline_complete.py
-├── data/
-│   └── (10X Multiome dataset files)
-├── results/
-│   ├── visualizations/
-│   ├── model_outputs/
-│   └── reports/
-├── environment/
-│   ├── requirements.txt
-│   └── setup_environment.txt
-└── README.md
-```
 
 ---
 
@@ -232,47 +221,31 @@ The pipeline evaluates multiple ML algorithms:
 - **Regulatory Analysis**: Chromatin accessibility patterns per cell type  
 - **Multi-modal Integration**: Joint RNA-ATAC feature importance
 
-### Clinical Relevance
-- **Biomarker Discovery**: Cell type-specific accessibility signatures
-- **Disease Applications**: Framework applicable to cancer, autoimmune diseases
-- **Drug Target Identification**: Regulatory elements as therapeutic targets
-
 ---
 
 ##  Contributors
 
-- **Rana H. Abu-Zeid** – Team Lead, RNA Processing Pipeline
+- **Rana H. Abu-Zeid** – Team Lead 
 - **Syrus Semawule** – ATAC Data Processing & Integration  
 - **Emmanuel Aroma** – Machine Learning Pipeline Development
 - **Toheeb Jumah** – Documentation & Validation
 
 ---
 
-## 📄 Citation
-
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@software{scmultiomics_pipeline,
-  author = {Abu-Zeid, Rana H. and Semawule, Syrus and Aroma, Emmanuel and Jumah, Toheeb},
-  title = {Single-Cell Multiomics Analysis Pipeline for Cell Type Classification},
-  year = {2025},
-  publisher = {GitHub},
-  url = {https://github.com/your-username/your-repo}
-}
-```
 
 ---
 
 ##  Contact & Support
 
-- **Primary Contact**: rana.abuzeid@badyau.edu.eg
-- **Issues**: GitHub Issues for bug reports and feature requests
-- **Documentation**: See `/docs` folder for detailed guides
+- **Primary Contact**:
+- **Issues**: 
+- **Documentation**:
 
 ---
 
 ##  Acknowledgments
+
+- **Olaitan I. Awe** – Training officer, ASBCB, Cape Town, South Africa. 
 
 - **ASBCB Omics Codeathon 2025** - Platform and support
 - **10X Genomics** - Open access multiome datasets  
@@ -283,7 +256,7 @@ If you use this pipeline in your research, please cite:
 
 ##  License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE] file for details.
 
 **Data License**: 10X Genomics datasets used under Creative Commons Attribution 4.0
 
