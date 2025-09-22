@@ -135,16 +135,16 @@ https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-1
 ### 3. Run Pipeline
 ```bash
 # Step 1: RNA Processing (R)
-Rscript -e "source('rna_processing_team1.R'); run_team1()"
+'rna_processing_part1.R'
 
 # Step 2: ATAC Processing (R)  
-Rscript -e "source('atac_processing_team2.R'); run_team2()"
+'atac_processing_part2.R'
 
 # Step 3: Data Integration (R)
-Rscript -e "source('atac_processing_team2.R'); run_integration()"
+'atac_processing_part2.R'
 
 # Step 4: ML Classification (Python)
-python ml_pipeline_complete.py
+ml_pipeline_complete.py
 ```
 
 ---
@@ -160,7 +160,7 @@ The pipeline evaluates multiple ML algorithms:
 | XGBoost | 0.94+ | 0.93+ | 0.94+ | 0.93+ | 0.97+ |
 | SVM | 0.92+ | 0.91+ | 0.92+ | 0.91+ | 0.96+ |
 
-### Key Cell Types Identified
+### Key Cell Types Identified ---------->>>>>>>>>>>>>>>>>>>>
 - T cells (CD4+, CD8+, regulatory)
 - B cells (naive, memory)
 - Monocytes (classical, non-classical) 
@@ -168,7 +168,7 @@ The pipeline evaluates multiple ML algorithms:
 - Dendritic cells
 - Platelets
 
-### Output Files Generated
+### Output Files Generated --------------->>>>>>>>>>>>>>>
 ```
 ├── Part1_rna_output/
 │   ├── rna_features_2000.csv
@@ -198,12 +198,12 @@ The pipeline evaluates multiple ML algorithms:
 - **SVM**: Balanced class weights, regularization parameter tuning
 - **Cross-validation**: 5-fold stratified CV for all models
 
-### Class Imbalance Handling
+### Class Imbalance Handling---------->>>>>>>>>>>>>>>>
 - Automated imbalance detection (threshold: 2:1 ratio)
 - SMOTE oversampling for minority classes
 - Stratified train/test splits maintaining class proportions
 
-### Feature Engineering  
+### Feature Engineering  ----------->>>>>>>>>>>>>.
 - RNA: Top 2000 highly variable genes
 - ATAC: Top 5000 most accessible peaks
 - Combined feature matrix: 7000 total features
@@ -226,16 +226,16 @@ The pipeline evaluates multiple ML algorithms:
 ##  Contributors
 
 - **Rana H. Abu-Zeid** – Team Lead 
-- **Syrus Semawule** – ATAC Data Processing & Integration  
-- **Emmanuel Aroma** – Machine Learning Pipeline Development
-- **Toheeb Jumah** – Documentation & Validation
+- **Syrus Semawule** – ATAC Data Processing & Integration  ---------->>>>>>>>
+- **Emmanuel Aroma** – Machine Learning Pipeline Development ---------->>>>>>>>
+- **Toheeb Jumah** – Documentation & Validation---------->>>>>>>>
 
 ---
 
 
 ---
 
-##  Contact & Support
+##  Contact & Support ---------->>>>>>>>
 
 - **Primary Contact**:
 - **Issues**: 
@@ -257,8 +257,6 @@ The pipeline evaluates multiple ML algorithms:
 ##  License
 
 This project is licensed under the MIT License - see the [LICENSE] file for details.
-
-**Data License**: 10X Genomics datasets used under Creative Commons Attribution 4.0
 
 ---
 
