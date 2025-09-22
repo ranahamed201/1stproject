@@ -26,35 +26,35 @@ This repository contains a comprehensive bioinformatics pipeline for analyzing s
 ## Pipeline Architecture
 
 ```
-Raw 10X Multiomics Data
-         ↓
-┌─────────────────┬─────────────────┐
-│   Part 1 (R)    │   Part 2 (R)    │
-│ RNA Processing  │ ATAC Processing │
-│        ↓        │       ↓         │
-│ • QC Filtering  │ • Peak Calling  │
-│ • Normalization │ • QC Metrics    │
-│ • Cell Typing   │ • TF-IDF Norm   │
-│ • Feature Sel   │ • LSI Reduction │
-└─────────────────┴─────────────────┘
-                  ↓
-           Data Integration
-                  ↓
-┌─────────────────────────────────────┐
-│        Part 3 (Python)              │
-│     ML Pipeline & Classification    │
-│                                     │
-│ • Class Balance Analysis            │
-│ • Feature Engineering               │  
-│ • Multi-model Training              │
-│ • Overfitting Prevention            │
-│ •  Evaluation                       │
-└─────────────────────────────────────┘
+                                                                    Raw 10X Multiomics Data
+                                                                                ↓
+                                                              ┌─────────────────┬─────────────────┐
+                                                              │   Part 1 (R)    │   Part 2 (R)    │
+                                                              │ RNA Processing  │ ATAC Processing │
+                                                              │        ↓        │       ↓         │
+                                                              │ • QC Filtering  │ • Peak Calling  │
+                                                              │ • Normalization │ • QC Metrics    │
+                                                              │ • Cell Typing   │ • TF-IDF Norm   │
+                                                              │ • Feature Sel   │ • LSI Reduction │
+                                                              └─────────────────┴─────────────────┘
+                                                                                ↓
+                                                                         Data Integration
+                                                                                ↓
+                                                              ┌─────────────────────────────────────┐
+                                                              │        Part 3 (Python)              │
+                                                              │     ML Pipeline & Classification    │
+                                                              │                                     │
+                                                              │ • Class Balance Analysis            │
+                                                              │ • Feature Engineering               │  
+                                                              │ • Multi-model Training              │
+                                                              │ • Overfitting Prevention            │
+                                                              │ •  Evaluation                       │
+                                                              └─────────────────────────────────────┘
 ```
 
 ---
 
-## 📊 Dataset
+##  Dataset:
 
 **Primary Dataset**: 10X Genomics PBMC Multiome (scATAC-seq + scRNA-seq)
 - **Source**: Healthy donor PBMCs (female, age 25)
