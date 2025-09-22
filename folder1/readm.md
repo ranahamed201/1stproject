@@ -121,8 +121,8 @@ pip install matplotlib seaborn plotly
 
 ### 2. Data Download
 Download the 10X Multiome dataset:
-```bash
-wget https://cf.10xgenomics.com/samples/cell-arc/2.0.0/pbmc_unsorted_10k/pbmc_unsorted_10k_filtered_feature_bc_matrix.h5
+```
+https://www.10xgenomics.com/datasets/pbmc-from-a-healthy-donor-no-cell-sorting-10-k-1-standard-1-0-0
 # ... (download other required files)
 ```
 
